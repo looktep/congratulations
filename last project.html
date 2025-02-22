@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #fdf2f8;
+            font-family: 'Sarabun', sans-serif;
+        }
+
+        .envelope-wrapper {
+            position: relative;
+            width: 300px;
+            height: 200px;
+            margin-bottom: 40px;
+            perspective: 1200px;
+        }
+
+        .envelope {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+        }
+
+        .envelope-base {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: #f9a8d4;
+            border-radius: 4px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            z-index: 2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .envelope-base::before {
+            content: 'ขอแสดงความยินดี';
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        /* จดหมาย - เพิ่มความสูงของกระดาษ */
+        .letter {
+            position: absolute;
+            width: calc(100% - 20px);
+            height: 350px; /* เพิ่มความสูงของกระดาษ */
+            background: white;
+            margin: 10px;
+            padding: 20px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            z-index: 1;
+            transform: translateZ(-1px) translateY(0);
+            opacity: 0;
+            transition: all 0.6s ease;
+            pointer-events: none;
+            box-sizing: border-box;
+            overflow-y: auto; /* เพิ่ม scroll เมื่อเนื้อหาเกินขนาด */
+        }
+
+        .letter.visible {
+            opacity: 1;
+            transform: translateZ(80px) translateY(-150px); /* ปรับตำแหน่งและยกสูงขึ้น */
+            pointer-events: auto;
+        }
+
+        .letter-content {
+            text-align: center;
+        }
+
+        .letter-text {
+            color: #4b5563;
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+
+        .letter-date {
+            color: #6b7280;
+            font-size: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .envelope-bottom {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            border-bottom: 100px solid #f472b6;
+            z-index: 3;
+            transform-origin: bottom;
+            transform: translateY(0);
+        }
+
+        .envelope-left {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-top: 100px solid transparent;
+            border-bottom: 100px solid transparent;
+            border-left: 150px solid #fb7185;
+            z-index: 3;
+            transform-origin: left;
+        }
+
+        .envelope-right {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 0;
+            height: 0;
+            border-top: 100px solid transparent;
+            border-bottom: 100px solid transparent;
+            border-right: 150px solid #fb7185;
+            z-index: 3;
+            transform-origin: right;
+        }
+
+        .envelope-top {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            border-top: 100px solid #f472b6;
+            transform-origin: top;
+            transition: transform 0.6s ease;
+            z-index: 4;
+        }
+
+        .envelope-top.open {
+            transform: rotateX(180deg);
+        }
+
+        .button-group {
+            margin-top: 20px;
+            display: flex;
+            gap: 12px;
+        }
+
+        .button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 9999px;
+            background-color: #f472b6;
+            color: white;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+        }
+
+        .button:hover {
+            background-color: #ec4899;
+            transform: translateY(-2px);
+        }
+
+        .envelope.lifting {
+            animation: lift 0.3s ease forwards;
+        }
+
+        @keyframes lift {
+            0% { transform: translateZ(0); }
+            100% { transform: translateZ(50px); }
+        }
+    </style>
+</head>
+<body>
+    <div class="envelope-wrapper">
+        <div class="envelope" id="envelope">
+            <div class="envelope-base"></div>
+            <div class="letter" id="letter">
+                <div class="letter-content">
+                    <div class="letter-text">
+                        ยินดีด้วยนะน้องออมสินที่จบ ม.3 แล้ว🥳<br>
+                        🎉มีความสุขมากๆนะ🎉<br><br>
+                        ทำตามความฝันให้ได้ล่ะ<br>
+                        อย่าให้อะไรโง่ๆมาหยุดมึงได้<br>
+                        กูอวยพรไม่เก่งว่ะขอให้ประสบความสำเร็จในอนาคต<br>
+                        และได้ทำในสิ่งที่อยากทำ โชคดีนะ
+                    </div>
+                    <div class="letter-date">ปล.กูนั่งแก้แค่อีซองจดหมายเป็นชาติ</div>
+                </div>
+            </div>
+            <div class="envelope-left"></div>
+            <div class="envelope-right"></div>
+            <div class="envelope-bottom"></div>
+            <div class="envelope-top" id="flap"></div>
+        </div>
+    </div>
+    <div class="button-group">
+        <button class="button" onclick="openEnvelope()">เปิดซอง</button>
+        <button class="button" onclick="closeEnvelope()">ปิดซอง</button>
+    </div>
+
+    <script>
+        function openEnvelope() {
+            const envelope = document.getElementById('envelope');
+            const flap = document.getElementById('flap');
+            const letter = document.getElementById('letter');
+            
+            envelope.classList.add('lifting');
+            flap.classList.add('open');
+            
+            setTimeout(() => {
+                letter.classList.add('visible');
+            }, 300);
+        }
+
+        function closeEnvelope() {
+            const envelope = document.getElementById('envelope');
+            const flap = document.getElementById('flap');
+            const letter = document.getElementById('letter');
+            
+            letter.classList.remove('visible');
+            envelope.classList.remove('lifting');
+            flap.classList.remove('open');
+        }
+    </script>
+</body>
