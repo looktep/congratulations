@@ -39,16 +39,43 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             z-index: 2;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
+            gap: 10px;
         }
 
         .envelope-base::before {
-            content: 'ขอแสดงความยินดี';
+            content: '';
             color: white;
             font-size: 1.5rem;
             font-weight: bold;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .congratulation-text {
+            color: white;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            animation: moveText 2s ease-in-out infinite, glowText 2s ease-in-out infinite;
+            text-shadow: 0 0 10px #fff,
+                         0 0 20px #fff,
+                         0 0 30px #e60073,
+                         0 0 40px #e60073,
+                         0 0 50px #e60073,
+                         0 0 60px #e60073,
+                         0 0 70px #e60073;
+        }
+
+        @keyframes moveText {
+            0%, 100% { transform: translateY(-3px); }
+            50% { transform: translateY(3px); }
+        }
+
+        @keyframes glowText {
+            0%, 100% { text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #e60073; }
+            50% { text-shadow: 0 0 20px #fff, 0 0 30px #ff4da6, 0 0 40px #ff4da6; }
         }
 
         .letter {
@@ -180,7 +207,6 @@
             100% { transform: translateZ(50px); }
         }
 
-        /* เพิ่ม styles สำหรับพลุ */
         .firework {
             position: absolute;
             width: 10px;
@@ -228,7 +254,9 @@
 <body>
     <div class="envelope-wrapper">
         <div class="envelope" id="envelope">
-            <div class="envelope-base"></div>
+            <div class="envelope-base">
+                <div class="congratulation-text">Congratulations!</div>
+            </div>
             <div class="letter" id="letter">
                 <div class="letter-content">
                     <div class="letter-text">
@@ -254,20 +282,28 @@
     </div>
 
     <script>
+        function getRandomColor() {
+            const colors = [
+                '#FF0000', '#00FF00', '#0000FF', '#FFFF00', 
+                '#FF00FF', '#00FFFF', '#FFA500', '#FF1493',
+                '#9400D3', '#7FFFD4', '#FFD700', '#FF4500'
+            ];
+            return colors[Math.floor(Math.random() * colors.length)];
+        }
+
         function createFirework(x, y) {
-            const colors = ['#ff69b4', '#ff1493', '#ff69b4', '#ff77aa', '#ff99cc'];
             const firework = document.createElement('div');
             firework.className = 'firework';
             firework.style.left = x + 'px';
             firework.style.top = y + 'px';
-            firework.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            firework.style.backgroundColor = getRandomColor();
             document.body.appendChild(firework);
 
             // สร้างประกายพลุ
             for (let i = 0; i < 12; i++) {
                 const spark = document.createElement('div');
                 spark.className = 'spark';
-                spark.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                spark.style.backgroundColor = getRandomColor();
                 spark.style.left = x + 'px';
                 spark.style.top = y + 'px';
                 
