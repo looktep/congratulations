@@ -2,6 +2,7 @@
 <html>
 <head>
     <style>
+        /* เก็บ styles เดิมทั้งหมด */
         body {
             display: flex;
             flex-direction: column;
@@ -11,6 +12,7 @@
             margin: 0;
             background-color: #fdf2f8;
             font-family: 'Sarabun', sans-serif;
+            overflow: hidden;
         }
 
         .envelope-wrapper {
@@ -49,11 +51,10 @@
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
         }
 
-        /* จดหมาย - เพิ่มความสูงของกระดาษ */
         .letter {
             position: absolute;
             width: calc(100% - 20px);
-            height: 350px; /* เพิ่มความสูงของกระดาษ */
+            height: 350px;
             background: white;
             margin: 10px;
             padding: 20px;
@@ -65,12 +66,12 @@
             transition: all 0.6s ease;
             pointer-events: none;
             box-sizing: border-box;
-            overflow-y: auto; /* เพิ่ม scroll เมื่อเนื้อหาเกินขนาด */
+            overflow-y: auto;
         }
 
         .letter.visible {
             opacity: 1;
-            transform: translateZ(80px) translateY(-150px); /* ปรับตำแหน่งและยกสูงขึ้น */
+            transform: translateZ(80px) translateY(-150px);
             pointer-events: auto;
         }
 
@@ -178,6 +179,50 @@
             0% { transform: translateZ(0); }
             100% { transform: translateZ(50px); }
         }
+
+        /* เพิ่ม styles สำหรับพลุ */
+        .firework {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: explode 1s ease-out forwards;
+        }
+
+        @keyframes explode {
+            0% {
+                transform: scale(0);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1.5);
+                opacity: 0;
+            }
+        }
+
+        .spark {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        @keyframes spark {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--tx), var(--ty)) scale(0);
+                opacity: 0;
+            }
+        }
     </style>
 </head>
 <body>
@@ -209,6 +254,53 @@
     </div>
 
     <script>
+        function createFirework(x, y) {
+            const colors = ['#ff69b4', '#ff1493', '#ff69b4', '#ff77aa', '#ff99cc'];
+            const firework = document.createElement('div');
+            firework.className = 'firework';
+            firework.style.left = x + 'px';
+            firework.style.top = y + 'px';
+            firework.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            document.body.appendChild(firework);
+
+            // สร้างประกายพลุ
+            for (let i = 0; i < 12; i++) {
+                const spark = document.createElement('div');
+                spark.className = 'spark';
+                spark.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                spark.style.left = x + 'px';
+                spark.style.top = y + 'px';
+                
+                const angle = (i * 30) * Math.PI / 180;
+                const distance = 50 + Math.random() * 50;
+                const tx = Math.cos(angle) * distance;
+                const ty = Math.sin(angle) * distance;
+                
+                spark.style.setProperty('--tx', tx + 'px');
+                spark.style.setProperty('--ty', ty + 'px');
+                spark.style.animation = 'spark 1s ease-out forwards';
+                
+                document.body.appendChild(spark);
+                
+                setTimeout(() => spark.remove(), 1000);
+            }
+
+            setTimeout(() => firework.remove(), 1000);
+        }
+
+        function createRandomFireworks() {
+            const viewportWidth = window.innerWidth;
+            const viewportHeight = window.innerHeight;
+            
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    const x = Math.random() * (viewportWidth - 100) + 50;
+                    const y = Math.random() * (viewportHeight - 100) + 50;
+                    createFirework(x, y);
+                }, i * 200);
+            }
+        }
+
         function openEnvelope() {
             const envelope = document.getElementById('envelope');
             const flap = document.getElementById('flap');
@@ -219,6 +311,7 @@
             
             setTimeout(() => {
                 letter.classList.add('visible');
+                createRandomFireworks();
             }, 300);
         }
 
@@ -233,3 +326,4 @@
         }
     </script>
 </body>
+</html>
