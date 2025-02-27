@@ -2,7 +2,6 @@
 <html>
 <head>
     <style>
-        /* เก็บ styles เดิมทั้งหมด */
         body {
             display: flex;
             flex-direction: column;
@@ -15,12 +14,21 @@
             overflow: hidden;
         }
 
+        .main-container {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
         .envelope-wrapper {
             position: relative;
             width: 300px;
             height: 200px;
             margin-bottom: 40px;
             perspective: 1200px;
+            z-index: 5;
         }
 
         .envelope {
@@ -45,12 +53,43 @@
             gap: 10px;
         }
 
-        .envelope-base::before {
-            content: '';
-            color: white;
-            font-size: 1.5rem;
+        .top-text {
+            position: absolute;
+            top: -60px;
+            width: 100%;
+            text-align: center;
+            color: #ff1493;
+            font-size: 2rem;
             font-weight: bold;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+            animation: floatingText 2s ease-in-out infinite,
+                       glowingText 2s ease-in-out infinite;
+            text-shadow: 0 0 10px #fff,
+                        0 0 20px #fff,
+                        0 0 30px #ff1493,
+                        0 0 40px #ff1493,
+                        0 0 50px #ff1493,
+                        0 0 60px #ff1493,
+                        0 0 70px #ff1493;
+        }
+
+        @keyframes floatingText {
+            0%, 100% { transform: translateY(-5px); }
+            50% { transform: translateY(5px); }
+        }
+
+        @keyframes glowingText {
+            0%, 100% {
+                text-shadow: 0 0 10px #fff,
+                            0 0 20px #fff,
+                            0 0 30px #ff1493,
+                            0 0 40px #ff1493;
+            }
+            50% {
+                text-shadow: 0 0 20px #fff,
+                            0 0 30px #ff69b4,
+                            0 0 40px #ff69b4,
+                            0 0 50px #ff69b4;
+            }
         }
 
         .congratulation-text {
@@ -249,35 +288,161 @@
                 opacity: 0;
             }
         }
+
+        /* SVG flower animations */
+        .flower-container-left {
+            position: absolute;
+            left: calc(50% - 290px);
+            top: 20px;
+        }
+
+        .flower-container-right {
+            position: absolute;
+            right: calc(50% - 290px);
+            top: 20px;
+        }
+
+        .flower-svg {
+            width: 100px;
+            height: 200px;
+        }
+
+        @keyframes sway {
+            0%, 100% { transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
+        }
+
+        .flower-stem {
+            animation: sway 3s ease-in-out infinite;
+            transform-origin: bottom center;
+        }
+
+        .flower-bloom {
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
     </style>
 </head>
 <body>
-    <div class="envelope-wrapper">
-        <div class="envelope" id="envelope">
-            <div class="envelope-base">
-                <div class="congratulation-text">Congratulations!</div>
-            </div>
-            <div class="letter" id="letter">
-                <div class="letter-content">
-                    <div class="letter-text">
-                        ยินดีด้วยนะน้องออมสินที่จบ ม.3 แล้ว🥳<br>
-                        🎉มีความสุขมากๆนะ🎉<br><br>
-                        ทำตามความฝันให้ได้ล่ะ<br>
-                        กูเชื่อมั่นในตัวมึงนะ<br>
-                        กูอวยพรไม่เก่งว่ะขอให้ประสบความสำเร็จในอนาคต<br>
-                        *จงทำให้ชีวิตมันง่ายด้วยการห็นใจตัวเองและคนอื่น
-                        ชีวิตมันไม่มีอะไรที่เพอร์เฟคไปทุกอย่างและชีวิตก็ไม่ใช่การแข่งขัน
-                        ขอจงแค่พยายามทุกสิ่งทุกอย่างจะอยู่ในกุมมือ*
-                    </div>
-                    <div class="letter-date">ปล.กูนั่งแก้แค่อีซองจดหมายเป็นชาติเชี้ยเอ้ยสุนทรพจน์แรกในชีวิต</div>
+    <div class="main-container">
+        <!-- Flowers on the left side -->
+        <div class="flower-container-left">
+            <svg class="flower-svg" viewBox="0 0 100 200" xmlns="http://www.w3.org/2000/svg">
+                <!-- Flower 1 -->
+                <g class="flower-stem" transform-origin="50 180">
+                    <!-- Stem -->
+                    <path d="M50 80 L50 180" stroke="#32CD32" stroke-width="3" />
+                    <!-- Leaves -->
+                    <path d="M50 120 Q30 110 20 120" stroke="#32CD32" stroke-width="2" fill="#7CFC00" />
+                    <path d="M50 150 Q70 140 80 150" stroke="#32CD32" stroke-width="2" fill="#7CFC00" />
+                    <!-- Bloom -->
+                    <g class="flower-bloom">
+                        <circle cx="50" cy="50" r="20" fill="#FF69B4" />
+                        <circle cx="50" cy="30" r="10" fill="#FF1493" />
+                        <circle cx="70" cy="50" r="10" fill="#FF1493" />
+                        <circle cx="50" cy="70" r="10" fill="#FF1493" />
+                        <circle cx="30" cy="50" r="10" fill="#FF1493" />
+                        <circle cx="65" cy="35" r="10" fill="#FF1493" />
+                        <circle cx="65" cy="65" r="10" fill="#FF1493" />
+                        <circle cx="35" cy="65" r="10" fill="#FF1493" />
+                        <circle cx="35" cy="35" r="10" fill="#FF1493" />
+                        <circle cx="50" cy="50" r="10" fill="#FFFF00" />
+                    </g>
+                </g>
+            </svg>
+
+            <svg class="flower-svg" viewBox="0 0 100 200" xmlns="http://www.w3.org/2000/svg" style="margin-top: -60px; margin-left: 40px;">
+                <!-- Flower 2 -->
+                <g class="flower-stem" transform-origin="50 180" style="animation-delay: 0.5s;">
+                    <!-- Stem -->
+                    <path d="M50 80 L50 180" stroke="#32CD32" stroke-width="3" />
+                    <!-- Leaves -->
+                    <path d="M50 130 Q30 120 20 130" stroke="#32CD32" stroke-width="2" fill="#7CFC00" />
+                    <path d="M50 160 Q70 150 80 160" stroke="#32CD32" stroke-width="2" fill="#7CFC00" />
+                    <!-- Bloom -->
+                    <g class="flower-bloom" style="animation-delay: 0.5s;">
+                        <!-- Petals -->
+                        <path d="M50 30 Q65 45 50 60 Q35 45 50 30" fill="#DA70D6" />
+                        <path d="M30 50 Q45 65 60 50 Q45 35 30 50" fill="#DA70D6" />
+                        <path d="M50 60 Q65 45 80 50 Q65 35 50 60" fill="#DA70D6" />
+                        <path d="M50 20 Q35 35 20 50 Q35 65 50 20" fill="#DA70D6" />
+                        <!-- Center -->
+                        <circle cx="50" cy="50" r="10" fill="#FFFF00" />
+                    </g>
+                </g>
+            </svg>
+        </div>
+        
+        <div class="envelope-wrapper">
+            <div class="envelope" id="envelope">
+                <div class="top-text">Congratulation!</div>
+                <div class="envelope-base">
+                    <div class="congratulation-text">Congratulations!</div>
                 </div>
+                <div class="letter" id="letter">
+                    <div class="letter-content">
+                        <div class="letter-text">
+                            ยินดีด้วยนะน้องออมสินที่จบ ม.3 แล้ว🥳<br>
+                            🎉มีความสุขมากๆนะ🎉<br><br>
+                            ทำตามความฝันให้ได้ล่ะ<br>
+                            กูเชื่อมั่นในตัวมึงนะ<br>
+                            กูอวยพรไม่เก่งว่ะเอาเป็นว่าดีใจด้วย<br>
+                            *จงทำให้ชีวิตมันง่ายด้วยการห็นใจตัวเองและคนอื่น
+                            ชีวิตมันไม่มีอะไรที่เพอร์เฟคไปทุกอย่างและชีวิตก็ไม่ใช่การแข่งขัน
+                            ขอจงแค่พยายามทุกสิ่งทุกอย่างจะอยู่ในกุมมือ*
+                        </div>
+                        <div class="letter-date">ปล.กูนั่งแก้แค่อีซองจดหมายเป็นชาติ</div>
+                    </div>
+                </div>
+                <div class="envelope-left"></div>
+                <div class="envelope-right"></div>
+                <div class="envelope-bottom"></div>
+                <div class="envelope-top" id="flap"></div>
             </div>
-            <div class="envelope-left"></div>
-            <div class="envelope-right"></div>
-            <div class="envelope-bottom"></div>
-            <div class="envelope-top" id="flap"></div>
+        </div>
+        
+        <!-- Flowers on the right side -->
+        <div class="flower-container-right">
+            <svg class="flower-svg" viewBox="0 0 100 200" xmlns="http://www.w3.org/2000/svg">
+                <!-- Flower 3 -->
+                <g class="flower-stem" transform-origin="50 180" style="animation-delay: 0.7s;">
+                    <!-- Stem -->
+                    <path d="M50 90 L50 180" stroke="#32CD32" stroke-width="3" />
+                    <!-- Leaves -->
+                    <path d="M50 120 Q70 110 80 120" stroke="#32CD32" stroke-width="2" fill="#7CFC00" />
+                    <path d="M50 150 Q30 140 20 150" stroke="#32CD32" stroke-width="2" fill="#7CFC00" />
+                    <!-- Bloom -->
+                    <g class="flower-bloom" style="animation-delay: 0.7s;">
+                        <!-- Rose-like flower -->
+                        <path d="M40,40 C30,30 30,60 50,50 C70,60 70,30 60,40 C70,30 60,20 50,30 C40,20 30,30 40,40 Z" fill="#FF69B4" />
+                        <path d="M45,45 C40,40 40,55 50,50 C60,55 60,40 55,45 C60,40 55,35 50,40 C45,35 40,40 45,45 Z" fill="#FF1493" />
+                        <circle cx="50" cy="47" r="5" fill="#FFFF00" />
+                    </g>
+                </g>
+            </svg>
+
+            <svg class="flower-svg" viewBox="0 0 100 200" xmlns="http://www.w3.org/2000/svg" style="margin-top: -50px; margin-left: 40px;">
+                <!-- Flower 4 -->
+                <g class="flower-stem" transform-origin="50 180" style="animation-delay: 1s;">
+                    <!-- Stem -->
+                    <path d="M50 70 L50 180" stroke="#32CD32" stroke-width="3" />
+                    <!-- Leaves -->
+                    <path d="M50 110 Q30 100 20 110" stroke="#32CD32" stroke-width="2" fill="#7CFC00" />
+                    <path d="M50 140 Q70 130 80 140" stroke="#32CD32" stroke-width="2" fill="#7CFC00" />
+                    <!-- Bloom - Tulip style -->
+                    <g class="flower-bloom" style="animation-delay: 1s;">
+                        <path d="M40,70 C30,40 40,20 50,30 C60,20 70,40 60,70 C55,75 45,75 40,70 Z" fill="#FF6EB4" />
+                        <path d="M45,68 C40,55 44,35 50,42 C56,35 60,55 55,68 C52,70 48,70 45,68 Z" fill="#FFB6C1" />
+                    </g>
+                </g>
+            </svg>
         </div>
     </div>
+    
     <div class="button-group">
         <button class="button" onclick="openEnvelope()">เปิดซอง</button>
         <button class="button" onclick="closeEnvelope()">ปิดซอง</button>
@@ -301,7 +466,6 @@
             firework.style.backgroundColor = getRandomColor();
             document.body.appendChild(firework);
 
-            // สร้างประกายพลุ
             for (let i = 0; i < 12; i++) {
                 const spark = document.createElement('div');
                 spark.className = 'spark';
